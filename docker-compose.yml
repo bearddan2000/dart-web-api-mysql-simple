@@ -1,0 +1,26 @@
+version: "3.7"
+
+services:
+  db:
+    image: mariadb:latest
+    volumes:
+      - ./db/sql:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_USER=maria
+      - MYSQL_PASSWORD=pass
+    healthcheck:
+      test: pwd
+      interval: 10s
+      retries: 5
+      start_period: 20s
+      timeout: 10s
+
+  dart-srv:
+    build: dart-srv
+    ports:
+      - 80
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true

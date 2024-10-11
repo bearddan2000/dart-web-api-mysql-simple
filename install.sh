@@ -79,13 +79,9 @@ function start-up(){
 
     echo "$info_base started" >> $logfile
 
-    echo "$info_base build image" >> $logfile
-
-    sudo docker build -t $docker_img_name .
-
     echo "$info_base running image" >> $logfile
 
-    sudo docker run -d --rm -p "80:80"  $docker_img_name
+    sudo docker compose up
 
     echo "$info_base ended" >> $logfile
 
@@ -94,13 +90,12 @@ function start-up(){
 function tear-down(){
 
     scope="tear-down"
-    docker_img_name=`head -n 1 README.md | sed 's/# //'`
-    pid=`docker ps | grep ${docker_img_name} | awk '{print $1;}'`
+    
     info_base="[$timestamp INFO]: $basefile::$scope"
 
     echo "$info_base started" >> $logfile
 
-    sudo docker stop $pid
+    sudo docker compose down
 
     echo "$info_base services removed" >> $logfile
 

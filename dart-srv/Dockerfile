@@ -2,10 +2,9 @@ FROM google/dart
 
 WORKDIR /app
 
-ADD ./bin/pubspec.* /app/
-RUN pub get
-ADD ./bin /app
-RUN pub get --offline
+COPY bin .
+
+RUN /usr/bin/dart pub add mysql_client
 
 CMD []
 ENTRYPOINT ["/usr/bin/dart", "main.dart"]
